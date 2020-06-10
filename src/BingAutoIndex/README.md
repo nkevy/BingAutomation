@@ -9,13 +9,12 @@ An example usage is shown bellow.
 
 Potential Errors
 ----------------
-
 If there are errors that are not on the following list please rebuild the tool from source. 
 Or list an issue. 
-https://github.com/nkevy/BingAutomation/tree/master/src/BingAutoIndex
+See https://github.com/nkevy/BingAutomation/tree/master/src/BingAutoIndex
 
 1. You have not configure the key to access your Bing Webmaster account. 
-https://docs.microsoft.com/en-us/bingwebmaster/getting-access
+See https://docs.microsoft.com/en-us/bingwebmaster/getting-access
 
 2. There are no .html files in the folder or directory. Please run the bingdex tool from the folder or directory that contains the .html files used to generate your website.
 
