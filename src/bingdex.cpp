@@ -7,14 +7,15 @@ int main(int argc,char **argv){
 		return 1;
 	}
 	std::string arg,item,msg;
-	std::vector<string> html_list = get_dir_html();
+	std::vector<string> file_list = get_dir_html();
+	std::vector<string> html_list;
 	arg  = argv[1];
-	for(int i=html_list.size()-1;i>-1;--i){
-		item = html_list[i];
-		html_list.pop_back();
-		html_list.insert(html_list.begin(),arg+item);
+	for(int i=0;i<file_list.size();++i){
+		item = file_list[i];
+		html_list.push_back(arg+item);
 	}
-	for(int i=0;i<html_list.size();i++){
-		std::cout<<html_list[i]<<std::endl;
-	}
+	file_list.erase(file_list.begin());
+	std::string index_data = get_json_from_vector("urlList",html_list);
+	std::cout<<index_data<<std::endl;
+	send_bing_json(index_data);
 }
