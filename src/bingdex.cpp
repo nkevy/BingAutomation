@@ -16,6 +16,6 @@ int main(int argc,char **argv){
 	}
 	file_list.erase(file_list.begin());
 	std::string index_data = get_json_from_vector("urlList",html_list);
-	std::cout<<index_data<<std::endl;
+	index_data = "\"siteUrl\":\""+arg+"\","+index_data;
 	send_bing_json(index_data);
 }
