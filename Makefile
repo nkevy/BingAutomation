@@ -1,6 +1,6 @@
 TARGET ?= bingdex
-CC = clang++
-FLG = -std=c++17 -I. -lcurl
+CC = g++
+FLG = -std=c++17 -I. -loath -lcurl
 
 $(TARGET):
 	$(CC) $(FLG) ./src/$(TARGET).cpp -o ./bin/$@

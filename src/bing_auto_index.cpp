@@ -1,4 +1,31 @@
 #include "bing_auto_index.h"
+//get key and url and create conf
+int set_bing_conf(std::ofstream &conf){
+	while(bingdata.url.empty()){
+		std::cout<<"Enter Website Url: ";
+		std::getline(std::cin, bingdata.url);
+	}
+	while(bingdata.apikey.empty()){
+		std::cout<<"Enter Bing Apikey: ";
+		std::getline(std::cin,bingdata.apikey);
+	}
+	conf<<bingdata.url<<"\n"<<bingdata.apikey;
+	return 0;
+}	
+//set key and url from conf
+int get_bing_conf(std::ifstream &conf){
+	conf.seekg(0,conf.end);
+	if(conf.tellg()<1){
+		return 1;
+	}
+	conf.seekg(0,conf.beg);
+	std::getline(conf,bingdata.url);
+	std::getline(conf,bingdata.apikey);
+	if (bingdata.url.empty()||bingdata.apikey.empty()){
+		return 1;
+	}
+	return 0;
+}
 // get all .html files in a dir
 std::vector<string> get_dir_html(){
 	std::vector<string> html_list;
@@ -26,8 +53,8 @@ int write_response(void *data,std::size_t size,std::size_t nmemb, void *stream){
 	((std::string*)stream)->append((char*)data, size * nmemb);
 	return size * nmemb;
 }
-//send curl with data as header and return response
-std::string curl_func(const std::string url,const std::string json){
+//send curl post with data as header and return response
+std::string curl_post_json(const std::string url,const std::string json){
 	CURL *curl;
 	CURLcode res;
 	std::string ret;
@@ -45,9 +72,7 @@ std::string curl_func(const std::string url,const std::string json){
 		curl_easy_setopt(curl,CURLOPT_WRITEDATA,&ret);
 		res = curl_easy_perform(curl);
 		if(res!=CURLE_OK){
-			curl_easy_cleanup(curl);	
-			curl_global_cleanup();
-			return curl_easy_strerror(res);
+			ret=curl_easy_strerror(res);
 		}
 		curl_easy_cleanup(curl);
 	}
@@ -55,35 +80,28 @@ std::string curl_func(const std::string url,const std::string json){
 	return ret;
 }
 //parse response json
-int json_handle(std::string res_str){
+std::map<std::string,std::string> json_handle(std::string res_str){
 	std::map<std::string,std::string> res_map;
-	std::string temp;
-	std::size_t found = res_str.find_first_of(":,");
-	std::size_t found_last = 0; 
-	std::cout<<found<<std::endl;
-	while(std::string::npos!=found){
-		if(':'==res_str[found]){
-			temp = res_str.substr(found_last,found);
-			res_map.emplace(temp,"");
+	char s1;
+	std::string kv,key;
+	for(int i=0;i<res_str.size();i++){
+		s1=res_str.at(i);
+		if('{'==s1||'}'==s1||'\n'==s1||' '==s1){
+			continue;
+		}else if(':'==s1){
+			key=kv;
+			kv="";
+		}else if(','==s1){
+			res_map[key]=kv;
+			kv="";
+		}else{
+			kv=kv+s1;
 		}
-		if(','==res_str[found]){
-			res_map[temp] = res_str.substr(found_last,found);
-		}
-		found_last = found;
-		temp = "";
-		found=res_str.find_first_of(":",found+1);
 	}
+	res_map[key]=kv;
 	for(auto const &pair : res_map){
-		std::cout<<pair.first<<" "<<pair.second<<std::endl;
+		std::cout<<pair.first<<"="<<pair.second<<std::endl;
 	}
-	return 0;
-}// send a json packet to Bing Webmaster (need key)
-int send_bing_json(std::string data){
-	//const std::string url = "https://postman-echo.com/get?json="+data;
-	const std::string url = "https://postman-echo.com/post";
-	std::string json = "{"+data+"}";
-	std::string result = curl_func(url,json);
-	std::cout<<result<<std::endl;
-	return 0;
+	return res_map;
 }
 //EOF

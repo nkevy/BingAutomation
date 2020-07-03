@@ -1,22 +1,33 @@
 #ifndef BING_AUTO_INDEX
 #define BING_AUTO_INDEX
+//
 //include necessary methods, libraries, and fields bellow
 #include <stdio.h>
 #include <stdlib.h>
 #include <curl/curl.h>
-#include <fstream>
 #include <filesystem>
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 #include <map>
 //
 //
 using namespace std;
+//
+//
+struct bingdex_data{
+	std::string url;
+	std::string apikey;
+};
+// global data
+//
+bingdex_data bingdata;
 std::vector<string> get_dir_html();
 std::string get_json_from_vector(std::vector<string> html_list);
-std::string curl_func(const std::string url,const std::string json);
+std::string curl_post_json(const std::string url,const std::string json);
+std::map<std::string,std::string> json_handle(std::string res_str);
+int get_bing_conf(std::ifstream &conf);
+int set_bing_conf(std::ofstream &conf);
 int write_response(void *data,std::size_t size,std::size_t nmemb, void *stream);
-int json_handle(std::string res_str);
-int send_bing_json(std::vector<string> html_list);
 #endif 
