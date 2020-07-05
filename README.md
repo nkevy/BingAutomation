@@ -10,13 +10,19 @@ This project has the following structure:
 			contains source cpp files
 			Makefile
 	bin:
-		MAC:
-			contaitns Macos binaries
-		Windows:
-			contains Windows binaries
+		UNIX:
+			contaitns Unix build
+		WINDOWS:
+			contains Windows build
 
 Precondition: A Bing Webmaster account.
 
 Tool(s):
 --------
-1. BingAutoIndex: a tool to automate the submition of URLS to Bing Webmaster Index tool. 
+bingdex, a tool to automate the submition of URLS to Bing Webmaster Index tool. 
+Example usage: 
+	$cd mywebsite
+	$bingdex
+	$[Succsess] A request to index html files has been sent to BingWebmaster.
+
+
