@@ -3,7 +3,7 @@ CC = g++
 FLG = -std=c++17 -I. -loath -lcurl
 
 $(TARGET):
-	$(CC) $(FLG) ./src/$(TARGET).cpp -o ./bin/$@
+	$(CC) $(FLG) ./src/$(TARGET).cpp -o ./bin/osx/$@
 
 .PHONY: clean
 clean:

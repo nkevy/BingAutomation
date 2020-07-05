@@ -1,5 +1,6 @@
 #ifndef BING_AUTO_INDEX
 #define BING_AUTO_INDEX
+#define CURL_STATICLIB
 //
 //include necessary methods, libraries, and fields bellow
 #include <stdio.h>
