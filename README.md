@@ -5,15 +5,18 @@ The BingAutomation git contains tool(s) that use the Bing Automation API for Bin
 Cpp is used to create binary tools. Binaries are included for Mac and Windows os.
 This project has the following structure:
 
-	src:
-		tool name:
+	UNIX:
+		src:
 			contains source cpp files
-			Makefile
-	bin:
-		UNIX:
-			contaitns Unix build
-		WINDOWS:
-			contains Windows build
+		bin:
+			contains unix binary
+		Makefile
+		
+	Windows:
+		contaitns source cpp files
+		
+		Release:
+			contains Windows executable
 
 Precondition: A Bing Webmaster account.
 
