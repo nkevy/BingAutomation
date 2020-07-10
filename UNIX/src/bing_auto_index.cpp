@@ -1,6 +1,6 @@
 #include "bing_auto_index.h"
 //get key and url and create conf
-int set_bing_conf(std::ofstream &conf){
+int set_bing_conf(std::ofstream &conf, bingdex *bingdata){
 	while(bingdata.url.empty()){
 		std::cout<<"Enter Website Url: ";
 		std::getline(std::cin, bingdata.url);
@@ -13,9 +13,9 @@ int set_bing_conf(std::ofstream &conf){
 	return 0;
 }	
 //set key and url from conf
-int get_bing_conf(std::ifstream &conf){
+int get_bing_conf(std::ifstream &conf, bingdex *bingdata){
 	conf.seekg(0,conf.end);
-	if(conf.tellg()<1){
+	if(conf.tellg()<1){ 
 		return 1;
 	}
 	conf.seekg(0,conf.beg);
@@ -31,7 +31,7 @@ std::vector<string> get_dir_html(){
 	std::vector<string> html_list;
 	std::string item;
 	for(auto& p: std::filesystem::directory_iterator(".")){
-		item = p.path().string().substr(1,std::string::npos);
+		item = p.path().string().substr(2,std::string::npos);
 		if(std::string::npos!=item.find(".html")){
 			html_list.push_back(item);
 		}
@@ -65,6 +65,7 @@ std::string curl_post_json(const std::string url,const std::string json){
 	if(curl){
 		header = curl_slist_append(header,"Content-Type: application/json; charset=utf-8");
 		header = curl_slist_append(header,content_len.c_str());
+		header = curl_slist_append(header, "HOST: ssl.bing.com");
 		curl_easy_setopt(curl,CURLOPT_URL,url.c_str());
 		curl_easy_setopt(curl,CURLOPT_HTTPHEADER,header);
 		curl_easy_setopt(curl,CURLOPT_POSTFIELDS,json.c_str());
@@ -84,7 +85,7 @@ std::map<std::string,std::string> json_handle(std::string res_str){
 	std::map<std::string,std::string> res_map;
 	char s1;
 	std::string kv,key;
-	for(int i=0;i<res_str.size();i++){
+	for(unsigned int i=0;i<res_str.size();i++){
 		s1=res_str.at(i);
 		if('{'==s1||'}'==s1||'\n'==s1||' '==s1){
 			continue;
