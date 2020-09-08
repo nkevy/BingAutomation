@@ -12,11 +12,13 @@ This project has the following structure:
 			contains unix binary
 		Makefile
 		
-	Windows:
+	WINDOWS:
 		contaitns source cpp files
 		
 		Release:
 			contains Windows executable
+	WindowsBin:
+		contains exe and dependencies.
 
 Precondition: A Bing Webmaster account.
 
